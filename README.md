@@ -1,114 +1,33 @@
+Merging the two README files into a single, comprehensive document requires careful consolidation of information to avoid repetition and ensure clarity. Below is a unified README.md that blends the key elements from both sources into a coherent guide:
+
+---
+
 # Project README: Dockerized Three-Tier Web Application
 
-This README documents the process of setting up, deploying, and managing a dockerized three-tier web application, consisting of a frontend, a backend, and a PostgreSQL database. It includes steps for Dockerization, environment variable management, Docker Compose configuration, database initialization, and automated image building and pushing using GitHub Actions.
+## Overview
+
+This project encapsulates a dockerized three-tier web application, consisting of a frontend, a backend, and a PostgreSQL database. It includes Dockerization, environment variable management, Docker Compose configuration, database initialization, and automated image building and pushing using GitHub Actions.
+
+## Table of Contents
+
+1. [Project Structure](#project-structure)
+2. [Docker Compose Configuration](#docker-compose-configuration)
+3. [Dockerfiles](#dockerfiles)
+4. [GitHub Actions CI/CD](#github-actions-cicd)
+5. [Running the Application](#running-the-application)
+6. [Building and Pushing Images](#building-and-pushing-images)
+7. [Environment Variables](#environment-variables)
+8. [Documentation](#documentation)
 
 ## Project Structure
 
-- **Backend**: A Node.js application serving as the API layer.
-- **Frontend**: A web application built with technologies like React.
+- **Backend**: A Node.js application serving the API.
+- **Frontend**: A web application built with React or similar technologies.
 - **Database**: A PostgreSQL database for data persistence.
-- **Dockerfiles**: Separate Dockerfiles for the frontend and backend.
-- **Docker Compose**: A tool used to define and run multi-container Docker applications.
-- **GitHub Actions**: For continuous integration and deployment.
+- **Docker Compose**: Orchestrates the application's services.
+- **GitHub Actions**: Automates the building and pushing of Docker images.
 
-## Milestones Checklist
-
-1. **Code Analysis and Environment Variables:**
-
-   - [x] Identified and replaced hardcoded values with environment variables.
-
-2. **Dockerfile Creation:**
-
-   - [x] Created Dockerfiles for frontend and backend.
-   - [x] Selected appropriate base images.
-   - [x] Copied application code into Docker images.
-   - [x] Installed dependencies within the Docker images.
-   - [x] Exposed necessary ports for communication.
-
-3. **Docker Compose Configuration:**
-
-   - [x] Defined services for frontend, backend, and database in `docker-compose.yml`.
-   - [x] Established network communication between services.
-   - [x] Configured volumes for data persistence, especially for the database.
-
-4. **Database Initialization:**
-
-   - [x] Executed an SQL script for dataset initialization within the database container.
-
-5. **Image Building and Pushing:**
-   - [x] Built Docker images for frontend and backend using `docker-compose build`.
-   - [x] Pushed images to Docker Hub using `docker-compose push`.
-   - [x] Set up Docker image build and push using GitHub Actions CI.
-
-## Building and Pushing Images
-
-### Manual Process
-
-1. **Build Images:**
-
-   ```bash
-   docker-compose build
-   ```
-
-2. **Push Images to Docker Hub:**
-   First, log in to Docker Hub:
-   ```bash
-   docker login --username your-username
-   ```
-   Then, push the images:
-   ```bash
-   docker-compose push
-   ```
-
-### Automated Process with GitHub Actions
-
-- Set up a CI/CD pipeline in `.github/workflows/ci.yml` to automatically build and push images upon code pushes to the repository.
-
-## Running the Application
-
-1. **Start the Application:**
-
-   ```bash
-   docker-compose up -d
-   ```
-
-2. **Access the Application:**
-
-   - Frontend at `http://localhost:3000`
-   - Backend at `http://localhost:3001/data`
-
-3. **Stop the Application:**
-   ```bash
-   docker-compose down
-   ```
-
-## Dockerfiles
-
-### Backend Dockerfile
-
-```Dockerfile
-FROM node:12
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 3001
-CMD ["node", "index.js"]
-```
-
-### Frontend Dockerfile
-
-```Dockerfile
-FROM node:12
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-## Docker Compose File (`docker-compose.yml`)
+## Docker Compose Configuration (`docker-compose.yml`)
 
 ```yaml
 version: "3.8"
@@ -146,27 +65,94 @@ volumes:
   db-data:
 ```
 
-## SQL Script for Database Initialization (`init.sql`)
+## Dockerfiles
 
-```sql
-CREATE TABLE movie_hero (
-  movie TEXT,
-  hero TEXT
-);
-INSERT INTO movie_hero(movie, hero) VALUES ('Titanic', 'Leonardo DiCaprio');
+### Backend Dockerfile
+
+```Dockerfile
+FROM node:12
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3001
+CMD ["node", "index.js"]
 ```
 
-## Evidence of Docker Hub Push
+### Frontend Dockerfile
 
-- Ensure to capture logs or screenshots confirming the successful push of Docker images to Docker Hub.
+```Dockerfile
+FROM node:12
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]
+```
 
-## GitHub Actions CI YAML
+## GitHub Actions CI/CD (`ci.yml`)
 
-File (`ci.yml`)
+```yaml
+name: CI/CD Pipeline
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - uses: docker/build-push-action@v2
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: tsmith4014/backend:latest
+      - uses: docker/build-push-action@v2
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: tsmith4014/frontend:latest
+```
 
-- GitHub Actions configuration for automated build and push (see `.github/workflows/ci.yml` in the repository).
+## Running the Application
 
----
+1. **Start the Application**:
+   ```bash
+   docker-compose up -d
+   ```
+2. **Access the Application**:
+   - Frontend at `http://localhost:${PORT_FRONTEND}`
+   - Backend at `http://localhost:${PORT_BACKEND}/data`
+3. **Stop the Application**:
+   ```bash
+   docker-compose down
+   ```
+
+## Building and Pushing Images
+
+### Manual Process
+
+- **Build Images**:
+  ```bash
+  docker-compose build
+  ```
+- **Push Images to Docker Hub**:
+  ```bash
+  docker login --username your-username
+  docker-compose push
+  ```
+
+### Automated Process with GitHub Actions
+
+- Set up a CI/CD pipeline in `.github/workflows/ci.yml` for automated build and push upon code pushes to the repository.
 
 ## Environment Variables
 
@@ -178,3 +164,5 @@ File (`ci.yml`)
 - Comments included in code to explain the purpose of environment variables and Dockerfile instructions.
 
 ---
+
+This README is designed to provide a clear, step-by-step guide for setting up and managing the dockerized web application, ensuring best practices in Dockerfile creation and seamless operation post-Dockerization. For further inquiries or assistance, consult the project repository.
