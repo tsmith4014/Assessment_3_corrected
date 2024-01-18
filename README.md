@@ -1,83 +1,83 @@
 # Project README: Dockerized Three-Tier Web Application
 
-This README provides detailed instructions and code snippets for setting up and deploying a three-tier web application, consisting of a frontend, backend, and a PostgreSQL database, all containerized using Docker.
+This README documents the process of setting up, deploying, and managing a dockerized three-tier web application, consisting of a frontend, a backend, and a PostgreSQL database. It includes steps for Dockerization, environment variable management, Docker Compose configuration, database initialization, and automated image building and pushing using GitHub Actions.
 
 ## Project Structure
 
-- **Backend**: Node.js application.
-- **Frontend**: React or similar web application.
-- **Database**: PostgreSQL database.
-- **Dockerfiles**: Separate Dockerfiles for frontend and backend.
-- **Docker Compose**: Used to orchestrate all three services.
+- **Backend**: A Node.js application serving as the API layer.
+- **Frontend**: A web application built with technologies like React.
+- **Database**: A PostgreSQL database for data persistence.
+- **Dockerfiles**: Separate Dockerfiles for the frontend and backend.
+- **Docker Compose**: A tool used to define and run multi-container Docker applications.
+- **GitHub Actions**: For continuous integration and deployment.
 
 ## Milestones Checklist
 
-### Environment Variables
+1. **Code Analysis and Environment Variables:**
 
-- Hardcoded values in both frontend and backend are replaced with environment variables for flexibility and security.
+   - [x] Identified and replaced hardcoded values with environment variables.
 
-### Dockerfile Creation
+2. **Dockerfile Creation:**
 
-- Dockerfiles are created for both frontend and backend.
-- Appropriate base images are selected.
-- Application code is copied into Docker images.
-- Dependencies are installed.
-- Ports required for communication are exposed.
+   - [x] Created Dockerfiles for frontend and backend.
+   - [x] Selected appropriate base images.
+   - [x] Copied application code into Docker images.
+   - [x] Installed dependencies within the Docker images.
+   - [x] Exposed necessary ports for communication.
 
-### Docker Compose Configuration
+3. **Docker Compose Configuration:**
 
-- Docker Compose is used to define and run multi-container Docker applications.
-- Services for the frontend, backend, and database are defined.
-- Network communication between services is established using Docker networks.
-- Volumes are used for data persistence in the database.
+   - [x] Defined services for frontend, backend, and database in `docker-compose.yml`.
+   - [x] Established network communication between services.
+   - [x] Configured volumes for data persistence, especially for the database.
 
-### Database Initialization
+4. **Database Initialization:**
 
-- An SQL script is used for initializing the database with a sample dataset.
+   - [x] Executed an SQL script for dataset initialization within the database container.
+
+5. **Image Building and Pushing:**
+   - [x] Built Docker images for frontend and backend using `docker-compose build`.
+   - [x] Pushed images to Docker Hub using `docker-compose push`.
+   - [x] Set up Docker image build and push using GitHub Actions CI.
 
 ## Building and Pushing Images
 
-### Building Images
+### Manual Process
 
-Use Docker Compose to build images:
-
-```bash
-docker-compose build
-```
-
-### Pushing Images to Docker Hub
-
-1. Log in to Docker Hub:
+1. **Build Images:**
 
    ```bash
-   docker login --username <your-docker-hub-username>
+   docker-compose build
    ```
 
-2. Push the images:
-
+2. **Push Images to Docker Hub:**
+   First, log in to Docker Hub:
+   ```bash
+   docker login --username your-username
+   ```
+   Then, push the images:
    ```bash
    docker-compose push
    ```
 
-### GitHub Actions CI/CD
+### Automated Process with GitHub Actions
 
-A GitHub Actions workflow (`ci.yml`) is set up in the `.github/workflows` directory to automate the building and pushing of images to Docker Hub.
+- Set up a CI/CD pipeline in `.github/workflows/ci.yml` to automatically build and push images upon code pushes to the repository.
 
 ## Running the Application
 
-1. **Start the Application**:
+1. **Start the Application:**
 
    ```bash
    docker-compose up -d
    ```
 
-2. **Access the Application**:
+2. **Access the Application:**
 
-   - Frontend: `http://localhost:<FRONTEND_PORT>`
-   - Backend: `http://localhost:<BACKEND_PORT>/data`
+   - Frontend at `http://localhost:3000`
+   - Backend at `http://localhost:3001/data`
 
-3. **Stop the Application**:
-
+3. **Stop the Application:**
    ```bash
    docker-compose down
    ```
@@ -87,7 +87,6 @@ A GitHub Actions workflow (`ci.yml`) is set up in the `.github/workflows` direct
 ### Backend Dockerfile
 
 ```Dockerfile
-# Dockerfile for backend
 FROM node:12
 WORKDIR /usr/src/app
 COPY package*.json ./
@@ -100,7 +99,6 @@ CMD ["node", "index.js"]
 ### Frontend Dockerfile
 
 ```Dockerfile
-# Dockerfile for frontend
 FROM node:12
 WORKDIR /usr/src/app
 COPY package*.json ./
@@ -110,9 +108,7 @@ EXPOSE 3000
 CMD ["npm", "start"]
 ```
 
-## Docker Compose File
-
-`docker-compose.yml`:
+## Docker Compose File (`docker-compose.yml`)
 
 ```yaml
 version: "3.8"
@@ -150,9 +146,7 @@ volumes:
   db-data:
 ```
 
-## SQL Script for Database Initialization
-
-Example `init.sql`:
+## SQL Script for Database Initialization (`init.sql`)
 
 ```sql
 CREATE TABLE movie_hero (
@@ -164,27 +158,23 @@ INSERT INTO movie_hero(movie, hero) VALUES ('Titanic', 'Leonardo DiCaprio');
 
 ## Evidence of Docker Hub Push
 
-Ensure to capture logs or screenshots confirming the successful push of Docker images to Docker Hub.
+- Ensure to capture logs or screenshots confirming the successful push of Docker images to Docker Hub.
 
-## GitHub Actions CI YAML File
+## GitHub Actions CI YAML
 
-The `ci.yml` file in the `.github/workflows` directory:
+File (`ci.yml`)
 
-```yaml
-# GitHub Actions configuration
-# ... [ci.yml content here] ...
-```
+- GitHub Actions configuration for automated build and push (see `.github/workflows/ci.yml` in the repository).
 
 ---
 
-Step 3: Configuring GitHub Secrets
-In your GitHub repository:
+## Environment Variables
 
-Go to Settings > Secrets.
-Click on New repository secret.
-Add DOCKER_HUB_USERNAME as the name and your Docker Hub username (tsmith4014) as the value.
-Add DOCKER_HUB_ACCESS_TOKEN as the name. Use a personal access token from Docker Hub (create this token from your Docker Hub account settings).
+- Ensure environment variables are correctly set in `docker-compose.yml` and used in Dockerfiles and application code.
 
-git add .
-git commit -m "Setup monorepo with CI/CD"
-git push origin main
+## Documentation
+
+- Detailed documentation is provided for each step of the setup and deployment process.
+- Comments included in code to explain the purpose of environment variables and Dockerfile instructions.
+
+---
