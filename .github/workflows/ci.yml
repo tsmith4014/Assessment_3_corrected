@@ -24,7 +24,7 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: tsmith4014/my-app-backend:latest
+          tags: tsmith4014/backend:latest
 
       - name: Build and push Frontend Docker image
         uses: docker/build-push-action@v2
@@ -32,4 +32,4 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: tsmith4014/my-app-frontend:latest
+          tags: tsmith4014/frontend:latest
