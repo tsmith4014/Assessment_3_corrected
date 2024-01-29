@@ -1,8 +1,4 @@
-Merging the two README files into a single, comprehensive document requires careful consolidation of information to avoid repetition and ensure clarity. Below is a unified README.md that blends the key elements from both sources into a coherent guide:
-
----
-
-# Project README: Dockerized Three-Tier Web Application
+# Dockerized Three-Tier Web Application
 
 ## Overview
 
@@ -164,5 +160,3 @@ jobs:
 - Comments included in code to explain the purpose of environment variables and Dockerfile instructions.
 
 ---
-
-This README is designed to provide a clear, step-by-step guide for setting up and managing the dockerized web application, ensuring best practices in Dockerfile creation and seamless operation post-Dockerization. For further inquiries or assistance, consult the project repository.
